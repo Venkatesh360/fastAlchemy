@@ -41,7 +41,7 @@ def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.post("/signin")
+@router.post("/signin", response_model=user_schema.SigninResponse)
 def signin(user: user_schema.UserLogin, db: Session = Depends(get_db)):
     # Authenticate user
     db_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
@@ -53,4 +53,8 @@ def signin(user: user_schema.UserLogin, db: Session = Depends(get_db)):
 
     # Generate access token
     token = utils.create_access_token({"sub": db_user.id})
-    return {"access_token": token, "token_type": "bearer"}
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": db_user
+    }

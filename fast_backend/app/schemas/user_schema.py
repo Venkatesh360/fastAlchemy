@@ -14,7 +14,6 @@ class UserLogin(BaseModel):
     
     
 class UserResponse(BaseModel):
-    id: int
     username: str
     email: str
     created_at: datetime
@@ -22,3 +21,10 @@ class UserResponse(BaseModel):
     
     class Config:
         orm_mode = True
+        
+        
+class SigninResponse(BaseModel):
+    access_token: str
+    token_type: str
+    user: UserResponse
+    
