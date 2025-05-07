@@ -7,8 +7,8 @@ A practice repository demonstrating a full-stack web application using FastAPI, 
 This project showcases a web application built with:
 
 - **Backend**: FastAPI with SQLAlchemy for database interactions.  
-- **Frontend**: Modern JavaScript framework (e.g., React or Vue).  
-- **Database**: PostgreSQL or SQLite.
+- **Frontend**: Modern JavaScript framework (React).  
+- **Database**: SQLite.
 
 ## Project Structure
 
