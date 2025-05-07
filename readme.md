@@ -44,7 +44,7 @@ fastAlchemy/
 Navigate to the backend directory:
 
 ```bash
-cd fast_backend/app
+cd fast_backend
 ```
 
 Create a virtual environment and activate it:
@@ -65,7 +65,7 @@ Configure the database settings in `database.py`.
 Run the FastAPI application:
 
 ```bash
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 ### Frontend Setup
