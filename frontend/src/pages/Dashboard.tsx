@@ -24,29 +24,13 @@ function Dashboard() {
   const [description, setDescription] = useState<string>("");
   const { token } = useAuth()
 
-  useEffect(() => {
-    getExpenses()
-  }, [])
-
-
   const getExpenses = async () => {
     const res = await axios.get("http://127.0.0.1:8000/api/expense/get_expense", {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-
     setExpenses(res.data.expenses);
-
-    console.log(res)
-  };
-
-  const handleEdit = (expense: Expense) => {
-    setId(expense.id)
-    setUpdate(expense);
-    setCategory(expense.category);
-    setAmount(expense.amount);
-    setDescription(expense.description);
   };
 
   const handleUpdate = async () => {
@@ -70,17 +54,29 @@ function Dashboard() {
     setUpdate(null);
   };
 
-
-
   const handleDelete = async (id: number) => {
     const res = await axios.delete(`http://127.0.0.1:8000/api/expense/delete_expense/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
-    console.log(res)
     getExpenses()
   };
+
+
+  useEffect(() => {
+    getExpenses()
+  }, [])
+
+
+  const handleEdit = (expense: Expense) => {
+    setId(expense.id)
+    setUpdate(expense);
+    setCategory(expense.category);
+    setAmount(expense.amount);
+    setDescription(expense.description);
+  };
+
 
   return (
     <div>
