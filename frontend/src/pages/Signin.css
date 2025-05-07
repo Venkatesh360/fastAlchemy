@@ -1,4 +1,3 @@
-/* Base styles */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -14,7 +13,6 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
-  /* Input styles */
   input[type="email"],
   input[type="password"] {
     width: 100%;
@@ -26,7 +24,6 @@ body {
     box-sizing: border-box;
   }
   
-  /* Button styles */
   button[type="submit"] {
     margin-top: 1.5rem;
     width: 100%;
@@ -44,7 +41,6 @@ body {
     background-color: #0056b3;
   }
   
-  /* Responsive tweaks */
   @media (max-width: 500px) {
     form {
       margin: 40px 1rem;

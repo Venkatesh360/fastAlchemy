@@ -8,7 +8,7 @@ from ..utils import utils
 
 router = APIRouter()
 
-# Dependency to get DB session
+
 def get_db():
     db = database.SessionLocal()
     try:
@@ -19,7 +19,7 @@ def get_db():
 
 @router.post("/signup", response_model=user_schema.SigninResponse)
 def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
-    # Check if user already exists
+   
     existing_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
     if existing_user:
         raise HTTPException(
@@ -27,7 +27,7 @@ def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
             detail="Email already exists"
         )
 
-    # Hash the password and create a new user
+    
     hashed_password = utils.hash_password(user.password)
     new_user = user_model.User(
         username=user.username,
@@ -49,7 +49,7 @@ def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/signin", response_model=user_schema.SigninResponse)
 def signin(user: user_schema.UserLogin, db: Session = Depends(get_db)):
-    # Authenticate user
+    
     db_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
     if not db_user or not utils.verify_password(user.password, db_user.hashed_password): #type: ignore
         raise HTTPException(
@@ -57,7 +57,7 @@ def signin(user: user_schema.UserLogin, db: Session = Depends(get_db)):
             detail="Invalid email or password"
         )
 
-    # Generate access token
+    
     token = utils.create_access_token({"sub": db_user.id})
     return {
         "access_token": token,

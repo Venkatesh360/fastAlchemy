@@ -2,9 +2,7 @@ import { Navigate } from "react-router-dom"
 import { useAuth } from "../context/UserContext"
 
 
-type PrivateRouteProps = {
-    children: JSX.Element;
-}
+
 
 const PrivateRoute = ({ children }: any) => {
     const { isLoggedIn, loading } = useAuth()

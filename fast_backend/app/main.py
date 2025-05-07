@@ -12,15 +12,15 @@ user_model.Base.metadata.create_all(bind=database.engine)
 
 
 origins = [
-    "http://localhost:5173"  # Your production frontend domain
+    "http://localhost:5173"  
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,            # List of allowed origins
-    allow_credentials=True,           # Allow cookies and authentication headers
-    allow_methods=["*"],              # Allow all HTTP methods
-    allow_headers=["*"],              # Allow all headers
+    allow_origins=origins,            
+    allow_credentials=True,           
+    allow_methods=["*"],              
+    allow_headers=["*"],              
 )
 
 app.include_router(auth_router, prefix='/api/auth', tags=["auth"])

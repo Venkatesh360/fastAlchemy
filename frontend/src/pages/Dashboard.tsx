@@ -24,6 +24,11 @@ function Dashboard() {
   const [description, setDescription] = useState<string>("");
   const { token } = useAuth()
 
+  useEffect(() => {
+    getExpenses()
+  }, [])
+
+
   const getExpenses = async () => {
     const res = await axios.get("http://127.0.0.1:8000/api/expense/get_expense", {
       headers: {
@@ -35,10 +40,6 @@ function Dashboard() {
 
     console.log(res)
   };
-
-  useEffect(() => {
-    getExpenses()
-  }, [])
 
   const handleEdit = (expense: Expense) => {
     setId(expense.id)
@@ -66,28 +67,10 @@ function Dashboard() {
     console.log(response)
 
     getExpenses()
-    // You could now update the backend or state here
     setUpdate(null);
   };
 
-  const handleCreate = async () => {
-    const expense_obj = {
-      category: category,
-      amount: amount,
-      description: description
-    }
 
-    const exp = await axios.post("http://127.0.0.1:8000/api/expense/create_expense", expense_obj, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    setCategory("")
-    setAmount(0)
-    setDescription("")
-    getExpenses()
-    console.log(exp)
-  }
 
   const handleDelete = async (id: number) => {
     const res = await axios.delete(`http://127.0.0.1:8000/api/expense/delete_expense/${id}`, {

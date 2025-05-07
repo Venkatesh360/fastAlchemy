@@ -26,7 +26,7 @@ class ExpenseResponse(ExpenseBase):
     updated_at: datetime
 
     class Config:
-        orm_mode = True  # Enables compatibility with ORM objects (e.g., SQLAlchemy)
+        orm_mode = True  
 
 
 class ExpenseListResponse(BaseModel):

@@ -114,7 +114,7 @@
   
   .update-button,
   .delete-button {
-    background-color: #28a745; /* Green for update */
+    background-color: #28a745; 
     color: white;
     padding: 8px 12px;
     border: none;
@@ -126,7 +126,7 @@
   }
   
   .delete-button {
-    background-color: #dc3545; /* Red for delete */
+    background-color: #dc3545;
   }
   
   .update-button:hover {

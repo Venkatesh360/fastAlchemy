@@ -8,14 +8,11 @@ select, input[type="text"], input[type="number"] {
     font-size: 1rem;
   }
   
-  /* Button styles (already in Dashboard.css) reused here */
   button {
     margin-top: 0.25rem;
   }
   
-  /* Responsive support */
   @media (max-width: 768px) {
-    /* Add this to keep CreateExpense table responsive like Dashboard */
     .create-expense-table, .create-expense-table tr, .create-expense-table td, .create-expense-table th {
       display: block;
       width: 100%;

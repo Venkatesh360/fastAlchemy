@@ -13,7 +13,6 @@ type Expense = {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28EFF'];
 
 function ExpensePieChartWithTable({ expenses }: { expenses: Expense[] }) {
-  // Group and total expenses by category
   const data = Object.values(
     expenses.reduce((acc, expense) => {
       if (!acc[expense.category]) {
@@ -35,7 +34,7 @@ function ExpensePieChartWithTable({ expenses }: { expenses: Expense[] }) {
   <Pie
     data={data}
     dataKey="amount"
-    nameKey="category" // this determines what's shown next to the dot
+    nameKey="category" 
     cx="50%"
     cy="50%"
     outerRadius={100}

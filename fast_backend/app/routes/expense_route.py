@@ -9,7 +9,6 @@ from ..models.user_model import Expense
 router = APIRouter()
 
 
-# Dependency to get DB session
 def get_db():
     db = database.SessionLocal()
     try:
