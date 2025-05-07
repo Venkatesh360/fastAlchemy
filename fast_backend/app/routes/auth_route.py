@@ -10,6 +10,14 @@ router = APIRouter()
 
 
 def get_db():
+    """
+    Dependency to retrieve a SQLAlchemy database session.
+
+    Yields:
+        Session: An active SQLAlchemy session.
+    
+    Ensures the session is properly closed after the request is completed.
+    """
     db = database.SessionLocal()
     try:
         yield db
@@ -19,7 +27,19 @@ def get_db():
 
 @router.post("/signup", response_model=user_schema.SigninResponse)
 def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
-   
+    """
+    Sign up a new user and create an access token.
+
+    Args:
+        user (UserCreate): The details of the user to be created, including username, email, and password.
+        db (Session): SQLAlchemy session for interacting with the database.
+
+    Returns:
+        dict: A dictionary containing the `access_token`, `token_type`, and the `user` object.
+
+    Raises:
+        HTTPException: If the email is already registered, a 400 status code with a relevant error message is raised.
+    """
     existing_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
     if existing_user:
         raise HTTPException(
@@ -49,7 +69,19 @@ def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/signin", response_model=user_schema.SigninResponse)
 def signin(user: user_schema.UserLogin, db: Session = Depends(get_db)):
-    
+    """
+    Sign in a user and return an access token.
+
+    Args:
+        user (UserLogin): The login credentials of the user, including email and password.
+        db (Session): SQLAlchemy session for interacting with the database.
+
+    Returns:
+        dict: A dictionary containing the `access_token`, `token_type`, and the authenticated `user` object.
+
+    Raises:
+        HTTPException: If the email is not found or the password is incorrect, a 401 status code with an error message is raised.
+    """
     db_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
     if not db_user or not utils.verify_password(user.password, db_user.hashed_password): #type: ignore
         raise HTTPException(
