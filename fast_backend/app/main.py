@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 
-user_model.Base.metadata.drop_all(bind=database.engine)
 user_model.Base.metadata.create_all(bind=database.engine)
 
 

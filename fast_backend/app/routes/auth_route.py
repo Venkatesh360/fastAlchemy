@@ -17,7 +17,7 @@ def get_db():
         db.close()
 
 
-@router.post("/signup", response_model=user_schema.UserResponse)
+@router.post("/signup", response_model=user_schema.SigninResponse)
 def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
     # Check if user already exists
     existing_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
@@ -38,7 +38,13 @@ def signup(user: user_schema.UserCreate, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return new_user
+    token = utils.create_access_token({"sub": new_user.id})
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": new_user
+    }
 
 
 @router.post("/signin", response_model=user_schema.SigninResponse)

@@ -1,84 +1,108 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/UserContext";
+import ExpensePieChart from "../components/ExpensePieChart";
+import CreateExpense from "../components/CreateExpense";
+import "./Dashboard.css"
+
 
 type Expense = {
   id: number;
   category: string;
   amount: number;
   description: string;
-  time: string;
-  date: string;
+  created_at: string;
+  updated_at: string;
 };
 
 function Dashboard() {
+  const [expenses, setExpenses] = useState<Expense[]>([])
+  const [id, setId] = useState<number | null>(null)
   const [update, setUpdate] = useState<Expense | null>(null);
   const [category, setCategory] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
   const { token } = useAuth()
 
-  const sampleExpenses = []
+  const getExpenses = async () => {
+    const res = await axios.get("http://127.0.0.1:8000/api/expense/get_expense", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    setExpenses(res.data.expenses);
+
+    console.log(res)
+  };
 
   useEffect(() => {
-    const getExpenses = async () => {
-      const res = axios.get("http://127.0.0.1:8000/api/expense/get_expense", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => console.log(res.data))
-        .catch(err => console.error(err));
-        console.log(res)
-    };
-
     getExpenses()
   }, [])
 
   const handleEdit = (expense: Expense) => {
+    setId(expense.id)
     setUpdate(expense);
     setCategory(expense.category);
     setAmount(expense.amount);
     setDescription(expense.description);
   };
 
-  const handleUpdate = () => {
-    console.log({
-      id: update?.id,
-      category,
-      amount,
-      description,
-    });
+  const handleUpdate = async () => {
+    const update_obj = {
+      expense_id: id,
+      category: category,
+      amount: amount,
+      description: description
+    }
+    console.log(update_obj)
+
+    const response = await axios.put("http://127.0.0.1:8000/api/expense/update_expense", update_obj, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    console.log(response)
+
+    getExpenses()
     // You could now update the backend or state here
     setUpdate(null);
   };
 
-  const handleCreate = async () =>{
+  const handleCreate = async () => {
     const expense_obj = {
       category: category,
       amount: amount,
       description: description
     }
 
-    const exp = await axios.post("http://127.0.0.1:8000/api/expense/create_expense", expense_obj,{
+    const exp = await axios.post("http://127.0.0.1:8000/api/expense/create_expense", expense_obj, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
     setCategory("")
-    setCategory(0)
-    setCategory("")
+    setAmount(0)
+    setDescription("")
+    getExpenses()
     console.log(exp)
   }
 
-  const handleDelete = (id: number) => {
-    console.log("Delete ID:", id);
-    // You could remove the row from state or make an API call
+  const handleDelete = async (id: number) => {
+    const res = await axios.delete(`http://127.0.0.1:8000/api/expense/delete_expense/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log(res)
+    getExpenses()
   };
 
   return (
     <div>
       <h1>My Expenses</h1>
+      <ExpensePieChart expenses={expenses}/>
       <table border={2} cellPadding="10">
         <thead>
           <tr>
@@ -91,14 +115,19 @@ function Dashboard() {
           </tr>
         </thead>
         <tbody>
-          {sampleExpenses.map((expense) => (
+          {expenses.map((expense) => (
             <tr key={expense.id}>
-              <td>{expense.category}</td>
-              <td>${expense.amount.toFixed(2)}</td>
-              <td>{expense.description}</td>
-              <td>{expense.time}</td>
-              <td>{expense.date}</td>
-              <td>
+              <td data-label="Category">{expense.category}</td>
+              <td data-label="Amount">₹{expense.amount.toFixed(2)}</td>
+              <td data-label="Description">{expense.description}</td>
+              <td data-label="Time">{new Date(expense.updated_at).toLocaleTimeString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                hour12: true
+              })}</td>
+              <td data-label="Date">{new Date(expense.updated_at).toLocaleDateString("en-IN", {
+                timeZone: "Asia/Kolkata"
+              })}</td>
+              <td data-label="Actions">
                 <button onClick={() => handleEdit(expense)}>Update</button>
                 <button
                   onClick={() => handleDelete(expense.id)}
@@ -139,16 +168,10 @@ function Dashboard() {
               </td>
             </tr>
           )}
-          <tr>
-            <th><input type="text" value={category} onChange={(e) => setCategory(e.target.value)} /></th>
-            <th><input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} /></th>
-            <th><input type="text" value={description} onChange={(e) => setDescription(e.target.value)} /></th>
-            <th></th>
-            <th></th>
-            <th> <button onClick={handleCreate}>Create</button></th>
-          </tr>
         </tbody>
       </table>
+      <h1>Create new expense</h1>
+      <CreateExpense expenses={expenses} getExpenses={getExpenses} />
     </div>
   );
 }

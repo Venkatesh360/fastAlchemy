@@ -1,0 +1,56 @@
+/* Select + Input base styles */
+select, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  /* Button styles (already in Dashboard.css) reused here */
+  button {
+    margin-top: 0.25rem;
+  }
+  
+  /* Responsive support */
+  @media (max-width: 768px) {
+    /* Add this to keep CreateExpense table responsive like Dashboard */
+    .create-expense-table, .create-expense-table tr, .create-expense-table td, .create-expense-table th {
+      display: block;
+      width: 100%;
+    }
+  
+    .create-expense-table thead {
+      display: none;
+    }
+  
+    .create-expense-table tr {
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 0.5rem;
+      background: #fff;
+    }
+  
+    .create-expense-table td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border: none;
+      border-bottom: 1px solid #eee;
+    }
+  
+    .create-expense-table td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      flex: 1;
+      margin-right: 10px;
+    }
+  
+    .create-expense-table td > * {
+      flex: 2;
+    }
+  }
+  

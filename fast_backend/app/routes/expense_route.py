@@ -52,6 +52,7 @@ def update_expense(
     user_id: int = Depends(utils.decode_token),
     db: Session = Depends(get_db)
 ):
+    print(exp_obj)
     expense = db.query(Expense).filter(
         (Expense.id == exp_obj.expense_id) & (Expense.user_id == user_id)
     ).first()

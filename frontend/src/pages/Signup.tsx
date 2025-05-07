@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-
+import { useAuth } from '../context/UserContext'
+import { useNavigate } from 'react-router-dom'
+import "./Signup.css"
 
 function Signup() {
     const [username, setUsername] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+    const {login} = useAuth()
+    const navigate = useNavigate()
 
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -14,6 +18,10 @@ function Signup() {
             email: email,
             password: password
         })
+        if (user.status == 200){
+            login({username:user.data.user.username}, user.data.access_token)
+            navigate("/")
+        }
 
         console.log(user)
     }
